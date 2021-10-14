@@ -5,7 +5,6 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { map, catchError } from "rxjs/operators";
 import { LocalStorageService } from "ngx-webstorage";
 import { FoiRequest, BlobFile } from "./models/FoiRequest";
-import { TransactionRequest } from "./models/Transaction";
 
 /**
  * Generic implementation of calls to the API. It supports making
@@ -24,13 +23,13 @@ import { TransactionRequest } from "./models/Transaction";
 })
 export class TransomApiClientService  {
   public baseUrl: string;
-  public pythonApiUril: string
+  public requestManagementUrl: string
   private headers: any;
   public currentUser: User;
 
   constructor(public http: HttpClient, private storage: LocalStorageService) {
     this.baseUrl = "/api/v1";
-    this.pythonApiUril = ""; // ?
+    this.requestManagementUrl = "";
     this.headers = {};
   }
   
@@ -104,18 +103,9 @@ export class TransomApiClientService  {
   }
 
   getFeeDetails(feeCode: String, details?: Object): Observable<any> {
-    const url = this.pythonApiUril + `/payments/${feeCode}` //fee code?;
+    const url = this.requestManagementUrl + `/payments/${feeCode}`
 
     const obs = this.http.post(url, JSON.stringify(details), {
-      headers: this.headers
-    });
-    return this.handleResponse(obs);
-  }
-
-  createTransaction(transactionRequest: TransactionRequest): Observable<any> {
-    const url = this.pythonApiUril + `/payments/createTransaction` //fee code?;
-
-    const obs = this.http.post(url, JSON.stringify(transactionRequest), {
       headers: this.headers
     });
     return this.handleResponse(obs);

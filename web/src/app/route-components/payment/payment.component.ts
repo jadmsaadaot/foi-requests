@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
 import { BaseComponent } from 'src/app/utils-components/base/base.component';
 import { FoiRequest } from 'src/app/models/FoiRequest';
-import { KeycloakService } from 'src/app/services/keycloak.service';
-import { WindowRefService } from 'src/app/services/window-ref.service';
 
 @Component({
   selector: 'app-payment',
@@ -23,7 +21,7 @@ export class PaymentComponent implements OnInit {
 
   ministryKey = "ministry"
 
-  constructor(private dataService: DataService, private keycloakService: KeycloakService, private windowRefService: WindowRefService) { }
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
     this.foiRequest = this.dataService.getCurrentState();
@@ -49,29 +47,6 @@ export class PaymentComponent implements OnInit {
   }
 
   doContinue() {
-    this.payBusy = true;
-    const response = this.doCreateTransaction();
-    response.subscribe(transactionDetails => {
-      if(transactionDetails.paySystemUrl) {
-        this.windowRefService.goToUrl(transactionDetails.paySystemUr)
-      }
-      else {
-        // error handling
-      }
-    })
-  }
 
-  getReturnUrl() {
-    const nextRoute = this.dataService.getRoute(this.base.getCurrentRoute()).forward ||
-      this.base.getCurrentRoute() + "-return";
-    const fullUrl = window.location.origin + "/" + nextRoute; 
-    return fullUrl
-  }
-
-  private doCreateTransaction () {
-    return this.dataService.createTransaction({
-      feeCode: this.feeCode,
-      redirectUrl: this.getReturnUrl()
-    })
   }
 }
