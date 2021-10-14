@@ -5,6 +5,7 @@ import { FoiRoute } from '../models/FoiRoute';
 import { FoiRequest, BlobFile } from '../models/FoiRequest';
 import { TransomApiClientService } from '../transom-api-client.service';
 import { FormGroup } from '@angular/forms';
+import { TransactionRequest } from '../models/Transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -240,6 +241,21 @@ export class DataService {
     }
 
     return this.apiClient.postFoiRequest(foiRequest);
+  }
+
+  getFeeDetails(feeCode: String, details?: Object): Observable<any> {
+    // this.apiClient.setHeader('Authorization', 'Bearer ' + authToken);
+    // this.apiClient.setHeader('captcha-nonce', nonce);
+
+    // return of({fee: 10})
+    return this.apiClient.getFeeDetails(feeCode, details);
+  }
+
+  createTransaction(transactionRequest: TransactionRequest): Observable<any> {
+    // this.apiClient.setHeader('Authorization', 'Bearer ' + authToken);
+    // this.apiClient.setHeader('captcha-nonce', nonce);
+
+    return this.apiClient.createTransaction(transactionRequest);
   }
 
   /**
